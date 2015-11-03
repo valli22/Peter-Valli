@@ -1,109 +1,74 @@
+
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#include "libreria.h"
 
-tline* tokenize(char* str);
+int head(int N);
+int tail(int N);
+int longlines(int N);
 
-struct tcommand {
-	char *filename;
-	int argc;
-	char **argv;
-}
+int head(int N){
+	int contador = 0;
+	char buf[1024];
+	while( (fgets(buf, 1024, stdin) != NULL) && (contador < N) )
+	{
+		printf("%s", buf);
+		contador++;
+	}
+	return 0;
+}	
 
-typedef struct tcommand tcommand;
+int longlines(int N){
 
-struct tline {
-	int ncommands;
-	tcommand *commands;
-	char *redirect_input;
-	char *redirect_output;
-	char *redirect_error;
-}
-
-typedef struct tline tline;
-
-tline* tokenize(char* str){
-
-	tline *comandos = (tline *) malloc (1024*sizeof(tline));
-	(*comandos).ncommands = 0;
-	(*comandos).commands = (tcommand *) malloc (1024*sizeof(tcommand));
-	(*comandos).redirect_input = (char *) malloc (1024*sizeof(char));
-	(*comandos).redirect_output = (char *) malloc (1024*sizeof(char));
-	(*comandos).redirect_error = (char *) malloc (1024*sizeof(char));
-	(*comandos).redirect_input = NULL;
-	(*comandos).redirect_output = NULL;
-	(*comandos).redirect_error = NULL;
-
-	if (str[0]=='\0'){
-
-		fprintf(stderr,"No se ha añadido nada");
-
-	}else{
-		int numeroComando = 0;
-		int i=0;
-		while (str[i]!='\0'){ //Inicio while principal, recorre toda la linea que entra por argumento
-
-			int j = 0;
-			int k = 0;
-			(*comandos).commands[numeroComando].argc = 0;
-			while ((str[i]!='|')||(str[i]!='\0')){ //Inicio while secundario, recorre los caracteres entre pipes
-
-				if (str[i]==' ') { //En caso de que el caracter sea un espacio avanza el numero de argumentos
-					k = 0;
-					j++;
-					(*comandos).commands[numeroComando].argc++;
-				}else if (str[i] == '-'){ //En caso de que el caracter sea un - y anteriormente hubiese un espacio, entonces avanza en la linea
-					if(k!=0){
-						fprintf(stderr,"Linea de comandos mal escrita");
-						exit 1;
-					}else{
-						i++;
-					}
-				}else if (str[i] == '<'){ //En caso de que el caracter sea un < y sea el primer comando, entonces avanza en la linea y reescribimos el input
-					k = 0;
-					if (numeroComando != 1) {
-						fprintf(stderr,"Redireccion de entrada erronea. Sólo puede realizarse sobre el primer mandato");
-						exit 1;
-					}else{
-						i++;
-						while(str[i]!=' '){
-							(*comandos).redirect_input[k] = str[i];
-							k++;
-							i++;
-						}
-					}
-				}else if (str[i] == '>'){ //En caso de que el caracter sea un > hay dos opciones si es seguido de un & entonces reescribimos la salida error y sino reescribimos la salido estandar
-					k = 0;
-					i++;
-					if (str[i]=='&'){
-						i++;
-						while(str[i]!=' '){
-							(*comandos).redirect_erorr[k] = str[i];
-							k++;
-							i++;
-						}
-					}else{
-						while(str[i]!= ' '){
-							(*comandos).redirect_output[k] = str[i];
-							k++;
-							i++;
-						}
-					}
-				}else { //En caso de que no sea ninguno de los anteriores se copia el caracter y se avanza en la linea
-					(*comandos).commands[numeroComando].argv[j][k] = str[i];
-					k++;
-					i++;
+	int contador = 0;
+	char comparador[1024];
+	char buf[N][1024];	
+	while( (fgets(comparador, 1024, stdin) != NULL))
+	{
+		
+		int i = N-1;
+		if (length(buf[i])<length(comparador)){
+			medio = false;
+			while (	i>=0 && !metido){
+					
+				if (length(buf[i])<length(comparador)){
+					buf[i] = buf[i--];
+				}else {
+					buf[i++] = comparador;
+					metido=true;
 				}
 
-
-			}//Fin del while secundario
-			if (numeroComando!=1) {
-				(*comandos).commands[numeroComando].argc--;
 			}
-			i++;
-			numeroComando++;
-
-		}//Fin del while principal
-
+		}
 	}
+	return 0;
+
+}
+
+int tail(int N) {
+	int contador = 0;
+	char comparador[1024];
+	char buf[N][1024];
+	while( (fgets(comparador, 1024, stdin) != NULL))
+	{
+		if (contador< N){
+			buf[contador]=comparador;
+			contador++;
+		}else {
+			contador = 0;
+			buf[contador] = comparador;
+			contador++;
+		}	
+	}
+	int i=contador;
+	contador--;
+	while (i!=contador){
+		if (i == N){
+			i = 0;
+		}
+		printf("%s",buf[i]);
+		i++;		
+	}
+	return 0;
 
 }

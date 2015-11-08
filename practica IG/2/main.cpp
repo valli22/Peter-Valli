@@ -7,11 +7,12 @@ using namespace std;
 #define SCREEN_SIZE 500,500
 #define SCREEN_POSITION 50,50
 float day=0.0,year=0.0,month=0.0;
-int tarea=2;
+int tarea=4;
 bool encendido=true;
 float zoom =-12.0,desplazamiento = 0.0;
 int leftButtonState = 0;
 int yaux=0.0;
+float rota=0.0,desp=0.0;
 
 void initFunc();
 void funReshape(int w, int h);
@@ -136,9 +137,47 @@ void funDisplay(){
             glTranslatef(1.5,0.0,0.0);
             drawMoon();
             break;
+        case 3:
+            glPushMatrix();
+                glTranslatef(0.0,0.0,-20.0);
+                drawSun();
+            glPopMatrix();
+            glPushMatrix();
+                glTranslatef(0.0,0.0,-20.0);
+                glRotatef(year,0.0,1.0,0.0);
+                glTranslatef(4.0,0.0,0.0);            
+                glRotatef(day,0.0,1.0,0.0);
+                drawEarth();
+            glPopMatrix();
+            glTranslatef(0.0,0.0,-20.0);
+            glRotatef(year,0.0,1.0,0.0);
+            glTranslatef(4.0,0.0,0.0);
+            glRotatef(month,0.0,1.0,0.0);
+            glTranslatef(1.5,0.0,0.0);
+            drawMoon();
+            break;
+        case 4:
+            glPushMatrix();
+                glTranslatef(-5.0,0.0,-15.0);
+            
+                glColor3f(0.5,0.5,1.0);
+                glScalef(1.0,0.5,0.5);
+                glutSolidCube(3.0);
+            glPopMatrix();
+            glTranslatef(-3.7,0.0,-15.0);
+            glRotatef(rota,0.0,0.0,1.0);
+            glTranslatef(1.5,0.0,0.0);
+            glColor3f(1.0,0.3,0.3);
+            glScalef(1.0,0.5,0.5);
+            glutSolidCube(3.0);
+            glTranslatef(2.5,0.0,0.0);
+            glTranslatef(desp,0.0,0.0);
+            glColor3f(0.5,1.0,0.5);
+            glScalef(1.0,0.4,0.4);
+            glutSolidCube(3.0);
+            
     }
-   
-    // Borramos el buffer de color
+
      // Intercambio de buffers
     glutSwapBuffers();
 }
@@ -174,66 +213,90 @@ void drawMoon(){
 }
 void processSpecialKeys(int key, int xx, int yy){
     
-    switch(key){
+    switch(tarea){
+        case 3:switch(key){
         
-        case GLUT_KEY_F1: encendido = !encendido;
-                          break;
-        case GLUT_KEY_UP: if (!encendido){
-                                year+=365%360;
-                            }
-                          break;
-        case GLUT_KEY_DOWN:if (!encendido){
-                                year-=365%360;
-                            }
-                          break;
-        case GLUT_KEY_LEFT:if (!encendido){
-                                month-=12%360;
-                            }
-                          break;
-        case GLUT_KEY_RIGHT:if (!encendido){
-                                month+=12%360;
-                            }
-                          break;
+                    case GLUT_KEY_F1: encendido = !encendido;
+                                      break;
+                    case GLUT_KEY_UP: if (!encendido){
+                                            year+=365%360;
+                                        }
+                                      break;
+                    case GLUT_KEY_DOWN:if (!encendido){
+                                            year-=365%360;
+                                        }
+                                       break;
+                    case GLUT_KEY_LEFT:if (!encendido){
+                                            month-=12%360;
+                                        }
+                                       break;
+                    case GLUT_KEY_RIGHT:if (!encendido){
+                                            month+=12%360;
+                                        }
+                                        break;
         
         
+                    }
+                    break;
+        case 4: switch(key){
+                    case GLUT_KEY_LEFT: desp-=1.0;
+                                        break;
+                    case GLUT_KEY_RIGHT: desp+=1.0;
+                                         break;
+                    case GLUT_KEY_UP: rota+=1.0;
+                                      break;
+                    case GLUT_KEY_DOWN: rota-=1.0;
+                                        break;
+                }
+                break;
     }
+    
     
 }
 void funMouse(int a,int b, int c, int d){
     
-    switch (a){
+    if(tarea==3){
+        switch (a){
         
-        case 3: if(zoom>-14.5){
-                    zoom-=0.1;
-                }
-                break;
-        case 4: if(zoom<-10.0){
-                    zoom +=0.1;
-                }
-                break;
-        case GLUT_LEFT_BUTTON:
-                if(b==GLUT_DOWN){
-                    leftButtonState=1;
-                }else {
-                    leftButtonState=0;
-                }
+            case 3: if(zoom>-14.5){
+                     zoom-=0.1;
+                    }
+                    break;
+            case 4: if(zoom<-10.0){
+                        zoom +=0.1;
+                    }
+                    break;
+            case GLUT_LEFT_BUTTON:
+                    if(b==GLUT_DOWN){
+                        leftButtonState=1;
+                    }else {
+                        leftButtonState=0;
+                    }
+        }
     }
     
 }
 void funMotion(int x, int y){
-    if (leftButtonState==1){
-        if(yaux>y){
-            desplazamiento+=0.1;
-        }else if (yaux<y){
-            desplazamiento-=0.1;
+    if(tarea==3){
+        if (leftButtonState==1){
+            if(yaux>y){
+                desplazamiento+=0.1;
+            }else if (yaux<y){
+                desplazamiento-=0.1;
+            }
+            yaux=y;
         }
-        yaux=y;
     }
 }
 
 void funIdle(){
-    
-    if(encendido){
+    if(tarea==3){
+        if(encendido){
+            day+=1%360;
+            year+=365%360;
+            month+=12%360;
+        }
+    } else{
         day+=1%360;
         year+=365%360;
         month+=12%360;

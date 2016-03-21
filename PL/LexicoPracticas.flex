@@ -2,9 +2,10 @@ import java_cup.runtime.*
 
 %%
 
+
+%class PracticaLexico
 %unicode
 %cup
-%class PracticaLexico
 
 identificador = [_a-zA-Z][a-zA-Z0-9_]*
 constNumInt = [+-]?[0-9]+
@@ -25,12 +26,12 @@ finParentesis = "*"")"
 "(*" {yybegin(comentPar);}
 
 "REAL" {return new java_cup.runtime.Symbol(sym.real);}
-"INTEGER" {return new java_cup.runtime.Symbol(sym.int);}
-"CHARACTER" {return new java_cup.runtime.Symbol(sym.char);}
+"INTEGER" {return new java_cup.runtime.Symbol(sym.tint);}
+"CHARACTER" {return new java_cup.runtime.Symbol(sym.tchar);}
 "program" {return new java_cup.runtime.Symbol(sym.program);}
 "begin" {return new java_cup.runtime.Symbol(sym.begin);}
 "end" {return new java_cup.runtime.Symbol(sym.end);}
-"const" {return new java_cup.runtime.Symbol(sym.const);}
+"const" {return new java_cup.runtime.Symbol(sym.tconst);}
 "var" {return new java_cup.runtime.Symbol(sym.var);}
 "procedure" {return new java_cup.runtime.Symbol(sym.procedure);}
 "function" {return new java_cup.runtime.Symbol(sym.function);}
@@ -43,14 +44,14 @@ finParentesis = "*"")"
 "array" {return new java_cup.runtime.Symbol(sym.array);}
 "of" {return new java_cup.runtime.Symbol(sym.of);}
 "record" {return new java_cup.runtime.Symbol(sym.record);}
-"if" {return new java_cup.runtime.Symbol(sym.if);}
+"if" {return new java_cup.runtime.Symbol(sym.tif);}
 "then" {return new java_cup.runtime.Symbol(sym.then);}
-"else" {return new java_cup.runtime.Symbol(sym.else);}
-"while" {return new java_cup.runtime.Symbol(sym.while);}
-"do" {return new java_cup.runtime.Symbol(sym.do);}
-"for" {return new java_cup.runtime.Symbol(sym.for);}
+"else" {return new java_cup.runtime.Symbol(sym.telse);}
+"while" {return new java_cup.runtime.Symbol(sym.twhile);}
+"do" {return new java_cup.runtime.Symbol(sym.tdo);}
+"for" {return new java_cup.runtime.Symbol(sym.tfor);}
 "to" {return new java_cup.runtime.Symbol(sym.to);}
-"case" {return new java_cup.runtime.Symbol(sym.case);}
+"case" {return new java_cup.runtime.Symbol(sym.tcase);}
 "," {return new java_cup.runtime.Symbol(sym.coma);}
 ";" {return new java_cup.runtime.Symbol(sym.puntocoma);}
 "." {return new java_cup.runtime.Symbol(sym.punto);}
@@ -74,8 +75,8 @@ finParentesis = "*"")"
 {identificador} {return new java_cup.runtime.Symbol(sym.id);}
 {constNumInt} {return new java_cup.runtime.Symbol(sym.constnumint);}
 {constNumReal} {return new java_cup.runtime.Symbol(sym.constnumreal);}
-{constNumIntH} {return new java_cup.runtime.Symbol(sym.constnuminth);}
-{constNumRealH} {return new java_cup.runtime.Symbol(sym.constnumrealh);}
+{constNumIntH} {return new java_cup.runtime.Symbol(sym.constnumint);}
+{constNumRealH} {return new java_cup.runtime.Symbol(sym.constnumreal);}
 
 <constLit>{
 		"''" {System.out.print("'");}

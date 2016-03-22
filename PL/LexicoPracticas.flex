@@ -1,4 +1,4 @@
-import java_cup.runtime.*
+import java_cup.runtime.*;
 
 %%
 
@@ -27,11 +27,7 @@ finParentesis = "*"")"
 
 "REAL" {return new java_cup.runtime.Symbol(sym.real);}
 "INTEGER" {return new java_cup.runtime.Symbol(sym.tint);}
-"CHARACTER" {return new java_cup.runtime.Symbol(sym.tchar);}
-"program" {return new java_cup.runtime.Symbol(sym.program);}
-"begin" {return new java_cup.runtime.Symbol(sym.begin);}
-"end" {return new java_cup.runtime.Symbol(sym.end);}
-"const" {return new java_cup.runtime.Symbol(sym.tconst);}
+"CHARACTER" {return cup.runtime.Symbol(sym.tconst);}
 "var" {return new java_cup.runtime.Symbol(sym.var);}
 "procedure" {return new java_cup.runtime.Symbol(sym.procedure);}
 "function" {return new java_cup.runtime.Symbol(sym.function);}
@@ -71,7 +67,8 @@ finParentesis = "*"")"
 ")" {return new java_cup.runtime.Symbol(sym.parentesisder);}
 "[" {return new java_cup.runtime.Symbol(sym.corcheteizq);}
 "]" {return new java_cup.runtime.Symbol(sym.corcheteder);}
-
+" " {System.out.println("esp");}
+[^.] {System.out.println("intro");}
 {identificador} {return new java_cup.runtime.Symbol(sym.id);}
 {constNumInt} {return new java_cup.runtime.Symbol(sym.constnumint);}
 {constNumReal} {return new java_cup.runtime.Symbol(sym.constnumreal);}

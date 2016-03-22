@@ -63,10 +63,10 @@ class PracticaLexico implements java_cup.runtime.Scanner {
     "\2\26\1\32\2\26\1\33\1\34\7\26\1\35\7\26"+
     "\1\36\1\37\1\40\1\41\1\42\1\43\1\0\1\26"+
     "\1\44\1\26\1\45\1\46\2\26\1\47\1\26\1\50"+
-    "\7\26\1\51\1\52\2\26\1\43\1\26\1\53\4\26"+
-    "\1\54\2\26\1\55\1\56\1\57\3\26\1\60\3\26"+
-    "\1\61\1\26\1\62\2\26\1\63\2\26\1\64\3\26"+
-    "\1\65\1\26\1\66\4\26\1\67\1\70\1\71";
+    "\7\26\1\51\1\52\2\26\1\53\1\26\1\54\4\26"+
+    "\1\55\2\26\1\56\1\57\1\60\3\26\1\61\3\26"+
+    "\1\62\1\26\1\63\2\26\1\64\2\26\1\65\3\26"+
+    "\1\66\1\26\1\67\4\26\1\70\1\71\1\72";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[148];
@@ -377,6 +377,14 @@ class PracticaLexico implements java_cup.runtime.Scanner {
    */
   private int zzFinalHighSurrogate = 0;
 
+  /* user code: */
+private Symbol sym(int type){
+return sym(type,yytext());
+}
+private Symbol sym(int type, Object value){
+return new Symbol(type,yyline,yycolumn,value);
+}
+
 
   /**
    * Creates a new scanner
@@ -638,6 +646,62 @@ class PracticaLexico implements java_cup.runtime.Scanner {
     while (true) {
       zzMarkedPosL = zzMarkedPos;
 
+      boolean zzR = false;
+      int zzCh;
+      int zzCharCount;
+      for (zzCurrentPosL = zzStartRead  ;
+           zzCurrentPosL < zzMarkedPosL ;
+           zzCurrentPosL += zzCharCount ) {
+        zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
+        zzCharCount = Character.charCount(zzCh);
+        switch (zzCh) {
+        case '\u000B':
+        case '\u000C':
+        case '\u0085':
+        case '\u2028':
+        case '\u2029':
+          yyline++;
+          yycolumn = 0;
+          zzR = false;
+          break;
+        case '\r':
+          yyline++;
+          yycolumn = 0;
+          zzR = true;
+          break;
+        case '\n':
+          if (zzR)
+            zzR = false;
+          else {
+            yyline++;
+            yycolumn = 0;
+          }
+          break;
+        default:
+          zzR = false;
+          yycolumn += zzCharCount;
+        }
+      }
+
+      if (zzR) {
+        // peek one character ahead if it is \n (if we have counted one line too much)
+        boolean zzPeek;
+        if (zzMarkedPosL < zzEndReadL)
+          zzPeek = zzBufferL[zzMarkedPosL] == '\n';
+        else if (zzAtEOF)
+          zzPeek = false;
+        else {
+          boolean eof = zzRefill();
+          zzEndReadL = zzEndRead;
+          zzMarkedPosL = zzMarkedPos;
+          zzBufferL = zzBuffer;
+          if (eof) 
+            zzPeek = false;
+          else 
+            zzPeek = zzBufferL[zzMarkedPosL] == '\n';
+        }
+        if (zzPeek) yyline--;
+      }
       zzAction = -1;
 
       zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
@@ -708,231 +772,235 @@ class PracticaLexico implements java_cup.runtime.Scanner {
           case 1: 
             { 
             }
-          case 58: break;
-          case 2: 
-            { return new java_cup.runtime.Symbol(sym.constnumint);
-            }
           case 59: break;
-          case 3: 
-            { return new java_cup.runtime.Symbol(sym.menos);
+          case 2: 
+            { return new java_cup.runtime.Symbol(sym.constnumint,yyline+1,yycolumn+1,yytext());
             }
           case 60: break;
-          case 4: 
-            { return new java_cup.runtime.Symbol(sym.punto);
+          case 3: 
+            { return new java_cup.runtime.Symbol(sym.menos,yyline+1,yycolumn+1,yytext());
             }
           case 61: break;
-          case 5: 
-            { return new java_cup.runtime.Symbol(sym.por);
+          case 4: 
+            { return new java_cup.runtime.Symbol(sym.punto,yyline+1,yycolumn+1,yytext());
             }
           case 62: break;
-          case 6: 
-            { return new java_cup.runtime.Symbol(sym.parentesisder);
+          case 5: 
+            { return new java_cup.runtime.Symbol(sym.por,yyline+1,yycolumn+1,yytext());
             }
           case 63: break;
+          case 6: 
+            { return new java_cup.runtime.Symbol(sym.parentesisder,yyline+1,yycolumn+1,yytext());
+            }
+          case 64: break;
           case 7: 
             { yybegin(constLit);
             }
-          case 64: break;
+          case 65: break;
           case 8: 
             { yybegin(comentLlav);
             }
-          case 65: break;
-          case 9: 
-            { return new java_cup.runtime.Symbol(sym.parentesisizq);
-            }
           case 66: break;
-          case 10: 
-            { return new java_cup.runtime.Symbol(sym.coma);
+          case 9: 
+            { return new java_cup.runtime.Symbol(sym.parentesisizq,yyline+1,yycolumn+1,yytext());
             }
           case 67: break;
-          case 11: 
-            { return new java_cup.runtime.Symbol(sym.puntocoma);
+          case 10: 
+            { return new java_cup.runtime.Symbol(sym.coma,yyline+1,yycolumn+1,yytext());
             }
           case 68: break;
-          case 12: 
-            { return new java_cup.runtime.Symbol(sym.igual);
+          case 11: 
+            { return new java_cup.runtime.Symbol(sym.puntocoma,yyline+1,yycolumn+1,yytext());
             }
           case 69: break;
-          case 13: 
-            { return new java_cup.runtime.Symbol(sym.mas);
+          case 12: 
+            { return new java_cup.runtime.Symbol(sym.igual,yyline+1,yycolumn+1,yytext());
             }
           case 70: break;
-          case 14: 
-            { return new java_cup.runtime.Symbol(sym.dospuntos);
+          case 13: 
+            { return new java_cup.runtime.Symbol(sym.mas,yyline+1,yycolumn+1,yytext());
             }
           case 71: break;
-          case 15: 
-            { return new java_cup.runtime.Symbol(sym.mayor);
+          case 14: 
+            { return new java_cup.runtime.Symbol(sym.dospuntos,yyline+1,yycolumn+1,yytext());
             }
           case 72: break;
-          case 16: 
-            { return new java_cup.runtime.Symbol(sym.menor);
+          case 15: 
+            { return new java_cup.runtime.Symbol(sym.mayor,yyline+1,yycolumn+1,yytext());
             }
           case 73: break;
-          case 17: 
-            { return new java_cup.runtime.Symbol(sym.corcheteizq);
+          case 16: 
+            { return new java_cup.runtime.Symbol(sym.menor,yyline+1,yycolumn+1,yytext());
             }
           case 74: break;
-          case 18: 
-            { return new java_cup.runtime.Symbol(sym.corcheteder);
+          case 17: 
+            { return new java_cup.runtime.Symbol(sym.corcheteizq,yyline+1,yycolumn+1,yytext());
             }
           case 75: break;
-          case 19: 
-            { yybegin(YYINITIAL); return new java_cup.runtime.Symbol(sym.constlit);
+          case 18: 
+            { return new java_cup.runtime.Symbol(sym.corcheteder,yyline+1,yycolumn+1,yytext());
             }
           case 76: break;
+          case 19: 
+            { yybegin(YYINITIAL); return new java_cup.runtime.Symbol(sym.constlit,yyline+1,yycolumn+1,yytext());
+            }
+          case 77: break;
           case 20: 
             { System.out.print(yytext());
             }
-          case 77: break;
+          case 78: break;
           case 21: 
             { yybegin(YYINITIAL);
             }
-          case 78: break;
-          case 22: 
-            { return new java_cup.runtime.Symbol(sym.id);
-            }
           case 79: break;
-          case 23: 
-            { return new java_cup.runtime.Symbol(sym.puntopunto);
+          case 22: 
+            { return new java_cup.runtime.Symbol(sym.id,yyline+1,yycolumn+1,yytext());
             }
           case 80: break;
+          case 23: 
+            { return new java_cup.runtime.Symbol(sym.puntopunto,yyline+1,yycolumn+1,yytext());
+            }
+          case 81: break;
           case 24: 
             { yybegin(comentPar);
             }
-          case 81: break;
-          case 25: 
-            { return new java_cup.runtime.Symbol(sym.tif);
-            }
           case 82: break;
-          case 26: 
-            { return new java_cup.runtime.Symbol(sym.tdo);
+          case 25: 
+            { return new java_cup.runtime.Symbol(sym.tif,yyline+1,yycolumn+1,yytext());
             }
           case 83: break;
-          case 27: 
-            { return new java_cup.runtime.Symbol(sym.or);
+          case 26: 
+            { return new java_cup.runtime.Symbol(sym.tdo,yyline+1,yycolumn+1,yytext());
             }
           case 84: break;
-          case 28: 
-            { return new java_cup.runtime.Symbol(sym.of);
+          case 27: 
+            { return new java_cup.runtime.Symbol(sym.or,yyline+1,yycolumn+1,yytext());
             }
           case 85: break;
-          case 29: 
-            { return new java_cup.runtime.Symbol(sym.to);
+          case 28: 
+            { return new java_cup.runtime.Symbol(sym.of,yyline+1,yycolumn+1,yytext());
             }
           case 86: break;
-          case 30: 
-            { return new java_cup.runtime.Symbol(sym.asignacion);
+          case 29: 
+            { return new java_cup.runtime.Symbol(sym.to,yyline+1,yycolumn+1,yytext());
             }
           case 87: break;
-          case 31: 
-            { return new java_cup.runtime.Symbol(sym.menorigual);
+          case 30: 
+            { return new java_cup.runtime.Symbol(sym.asignacion,yyline+1,yycolumn+1,yytext());
             }
           case 88: break;
-          case 32: 
-            { return new java_cup.runtime.Symbol(sym.distinto);
+          case 31: 
+            { return new java_cup.runtime.Symbol(sym.menorigual,yyline+1,yycolumn+1,yytext());
             }
           case 89: break;
-          case 33: 
-            { return new java_cup.runtime.Symbol(sym.mayorigual);
+          case 32: 
+            { return new java_cup.runtime.Symbol(sym.distinto,yyline+1,yycolumn+1,yytext());
             }
           case 90: break;
+          case 33: 
+            { return new java_cup.runtime.Symbol(sym.mayorigual,yyline+1,yycolumn+1,yytext());
+            }
+          case 91: break;
           case 34: 
             { System.out.print("'");
             }
-          case 91: break;
-          case 35: 
-            { return new java_cup.runtime.Symbol(sym.constnumreal);
-            }
           case 92: break;
-          case 36: 
-            { return new java_cup.runtime.Symbol(sym.end);
+          case 35: 
+            { return new java_cup.runtime.Symbol(sym.constnumreal,yyline+1,yycolumn+1,yytext());
             }
           case 93: break;
-          case 37: 
-            { return new java_cup.runtime.Symbol(sym.not);
+          case 36: 
+            { return new java_cup.runtime.Symbol(sym.end,yyline+1,yycolumn+1,yytext());
             }
           case 94: break;
-          case 38: 
-            { return new java_cup.runtime.Symbol(sym.div);
+          case 37: 
+            { return new java_cup.runtime.Symbol(sym.not,yyline+1,yycolumn+1,yytext());
             }
           case 95: break;
-          case 39: 
-            { return new java_cup.runtime.Symbol(sym.and);
+          case 38: 
+            { return new java_cup.runtime.Symbol(sym.div,yyline+1,yycolumn+1,yytext());
             }
           case 96: break;
-          case 40: 
-            { return new java_cup.runtime.Symbol(sym.mod);
+          case 39: 
+            { return new java_cup.runtime.Symbol(sym.and,yyline+1,yycolumn+1,yytext());
             }
           case 97: break;
-          case 41: 
-            { return new java_cup.runtime.Symbol(sym.var);
+          case 40: 
+            { return new java_cup.runtime.Symbol(sym.mod,yyline+1,yycolumn+1,yytext());
             }
           case 98: break;
-          case 42: 
-            { return new java_cup.runtime.Symbol(sym.tfor);
+          case 41: 
+            { return new java_cup.runtime.Symbol(sym.var,yyline+1,yycolumn+1,yytext());
             }
           case 99: break;
-          case 43: 
-            { return new java_cup.runtime.Symbol(sym.telse);
+          case 42: 
+            { return new java_cup.runtime.Symbol(sym.tfor,yyline+1,yycolumn+1,yytext());
             }
           case 100: break;
-          case 44: 
-            { return new java_cup.runtime.Symbol(sym.real);
+          case 43: 
+            { return new java_cup.runtime.Sysbol(sym.constnumreal,yyline+1,yycolumn+1,yytext());
             }
           case 101: break;
-          case 45: 
-            { return new java_cup.runtime.Symbol(sym.tcase);
+          case 44: 
+            { return new java_cup.runtime.Symbol(sym.telse,yyline+1,yycolumn+1,yytext());
             }
           case 102: break;
-          case 46: 
-            { return new java_cup.runtime.Symbol(sym.type);
+          case 45: 
+            { return new java_cup.runtime.Symbol(sym.real,yyline+1,yycolumn+1,yytext());
             }
           case 103: break;
-          case 47: 
-            { return new java_cup.runtime.Symbol(sym.then);
+          case 46: 
+            { return new java_cup.runtime.Symbol(sym.tcase,yyline+1,yycolumn+1,yytext());
             }
           case 104: break;
-          case 48: 
-            { return new java_cup.runtime.Symbol(sym.begin);
+          case 47: 
+            { return new java_cup.runtime.Symbol(sym.type,yyline+1,yycolumn+1,yytext());
             }
           case 105: break;
-          case 49: 
-            { return new java_cup.runtime.Symbol(sym.array);
+          case 48: 
+            { return new java_cup.runtime.Symbol(sym.then,yyline+1,yycolumn+1,yytext());
             }
           case 106: break;
-          case 50: 
-            { return new java_cup.runtime.Symbol(sym.tconst);
+          case 49: 
+            { return new java_cup.runtime.Symbol(sym.begin,yyline+1,yycolumn+1,yytext());
             }
           case 107: break;
-          case 51: 
-            { return new java_cup.runtime.Symbol(sym.twhile);
+          case 50: 
+            { return new java_cup.runtime.Symbol(sym.array,yyline+1,yycolumn+1,yytext());
             }
           case 108: break;
-          case 52: 
-            { return new java_cup.runtime.Symbol(sym.record);
+          case 51: 
+            { return new java_cup.runtime.Symbol(sym.tconst,yyline+1,yycolumn+1,yytext());
             }
           case 109: break;
-          case 53: 
-            { return new java_cup.runtime.Symbol(sym.program);
+          case 52: 
+            { return new java_cup.runtime.Symbol(sym.twhile,yyline+1,yycolumn+1,yytext());
             }
           case 110: break;
-          case 54: 
-            { return new java_cup.runtime.Symbol(sym.tint);
+          case 53: 
+            { return new java_cup.runtime.Symbol(sym.record,yyline+1,yycolumn+1,yytext());
             }
           case 111: break;
-          case 55: 
-            { return new java_cup.runtime.Symbol(sym.function);
+          case 54: 
+            { return new java_cup.runtime.Symbol(sym.program,yyline+1,yycolumn+1,yytext());
             }
           case 112: break;
-          case 56: 
-            { return new java_cup.runtime.Symbol(sym.procedure);
+          case 55: 
+            { return new java_cup.runtime.Symbol(sym.tint,yyline+1,yycolumn+1,yytext());
             }
           case 113: break;
-          case 57: 
-            { return new java_cup.runtime.Symbol(sym.tchar);
+          case 56: 
+            { return new java_cup.runtime.Symbol(sym.function,yyline+1,yycolumn+1,yytext());
             }
           case 114: break;
+          case 57: 
+            { return new java_cup.runtime.Symbol(sym.procedure,yyline+1,yycolumn+1,yytext());
+            }
+          case 115: break;
+          case 58: 
+            { return new java_cup.runtime.Symbol(sym.tchar,yyline+1,yycolumn+1,yytext());
+            }
+          case 116: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

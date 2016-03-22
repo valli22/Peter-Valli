@@ -20,6 +20,10 @@ finParentesis = "*"")"
 
 %%
 
+{constNumInt} {return new java_cup.runtime.Symbol(sym.constnumint);}
+{constNumIntH} {return new java_cup.runtime.Symbol(sym.constnumint);}
+{constNumReal} {return new java_cup.runtime.Symbol(sym.constnumreal);}
+{constNumRealH} {return new java_cup.runtime.Symbol(sym.constnumreal);}
 
 "'" {yybegin(constLit);}
 "{" {yybegin(comentLlav);}
@@ -71,13 +75,11 @@ finParentesis = "*"")"
 ")" {return new java_cup.runtime.Symbol(sym.parentesisder);}
 "[" {return new java_cup.runtime.Symbol(sym.corcheteizq);}
 "]" {return new java_cup.runtime.Symbol(sym.corcheteder);}
-" " {System.out.println("esp");}
-[^.] {System.out.println("intro");}
+" " {}
+[^.] {}
+
 {identificador} {return new java_cup.runtime.Symbol(sym.id);}
-{constNumInt} {return new java_cup.runtime.Symbol(sym.constnumint);}
-{constNumReal} {return new java_cup.runtime.Symbol(sym.constnumreal);}
-{constNumIntH} {return new java_cup.runtime.Symbol(sym.constnumint);}
-{constNumRealH} {return new java_cup.runtime.Symbol(sym.constnumreal);}
+
 
 <constLit>{
 		"''" {System.out.print("'");}

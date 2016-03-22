@@ -25,9 +25,13 @@ finParentesis = "*"")"
 "{" {yybegin(comentLlav);}
 "(*" {yybegin(comentPar);}
 
+"begin" {return new java_cup.runtime.Symbol(sym.begin);}
+"end" {return new java_cup.runtime.Symbol(sym.end);}
+"program" {return new java_cup.runtime.Symbol(sym.program);}
 "REAL" {return new java_cup.runtime.Symbol(sym.real);}
 "INTEGER" {return new java_cup.runtime.Symbol(sym.tint);}
-"CHARACTER" {return cup.runtime.Symbol(sym.tconst);}
+"const" {return new java_cup.runtime.Symbol(sym.tconst);}
+"CHARACTER" {return new java_cup.runtime.Symbol(sym.tchar);}
 "var" {return new java_cup.runtime.Symbol(sym.var);}
 "procedure" {return new java_cup.runtime.Symbol(sym.procedure);}
 "function" {return new java_cup.runtime.Symbol(sym.function);}

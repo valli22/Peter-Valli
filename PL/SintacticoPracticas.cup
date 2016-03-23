@@ -1,4 +1,11 @@
 import java_cup.runtime.*;
+parser code
+{:
+public void syntax_error(Symbol cur_token){
+System.err.println("An error has been detected on \" "+cur_token.value+" \" whose position is: line -> "+cur_token.left+", column -> "+cur_token.right);
+this.report_expected_token_ids();
+}
+:}
 terminal real, punto, tint, tchar, program, begin, end, tconst, var, procedure, function, div, mod, or, and, not, type, array, of, record, tif, then, telse, twhile, tdo, tfor, to, tcase, coma, puntocoma, igual, mas, dospuntos, puntopunto, asignacion, mayor, menos, menor, menorigual, mayorigual, distinto, por, parentesisizq, parentesisder, corcheteizq, corcheteder, id, constlit, constnumint, constnumreal;
 non terminal EXPAUX, PRG, BLQ, DCLLIST, DCL, SENTLIST, SENT, DEFCTE, DEFVAR, DEFPROC, DEFFUN, CTELIST, SIMPVALUE, DEFVARLIST, VARLIST, TBAS, FORMAL_PARAMLIST, FORMAL_PARAM, ASIG, PROC_CALL, EXEBLQ, ID, EXP, OP, FACTOR, OPCOMP, OPLOG, OPARIT, SUBPPARAMLIST, EXPLIST, DCLLIST_BLQ, DCL_BLQ, DEFTYPE, TYPELIST, UDTYPE, ALLTYPES, COND, ELSECOND, WLOOP, FLOOP, CASE, CASELIST;
 PRG::= program id puntocoma BLQ punto;

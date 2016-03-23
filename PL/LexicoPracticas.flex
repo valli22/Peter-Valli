@@ -2,6 +2,10 @@ import java_cup.runtime.*;
 
 %%
 
+%{
+private String litconst;
+%}
+
 %class PracticaLexico
 %unicode
 %cup
@@ -26,7 +30,7 @@ finParentesis = "*"")"
 {constNumReal} {return new java_cup.runtime.Symbol(sym.constnumreal,yyline+1,yycolumn+1,yytext());}
 {constNumRealH} {return new java_cup.runtime.Symbol(sym.constnumreal,yyline+1,yycolumn+1,yytext());}
 
-"'" {yybegin(constLit);}
+"'" {litconst=""; yybegin(constLit);}
 "{" {yybegin(comentLlav);}
 "(*" {yybegin(comentPar);}
 
@@ -83,18 +87,18 @@ finParentesis = "*"")"
 
 
 <constLit>{
-		"''" {System.out.print("'");}
-		"'" {yybegin(YYINITIAL); return new java_cup.runtime.Symbol(sym.constlit,yyline+1,yycolumn+1,yytext());}
-		[^'] {}
+		"''" {litconst+="'";}
+		"'" {yybegin(YYINITIAL); return new java_cup.runtime.Symbol(sym.constlit,yyline+1,yycolumn+1,litconst);}
+		[^'] {litconst+=yytext();}
 		
 	  }
 
 <comentLlav>{
-		[^}] {System.out.print(yytext());}
+		[^}] {}
 		"}" {yybegin(YYINITIAL);}
 	    }
 
 <comentPar>{
 		{finParentesis} {yybegin(YYINITIAL);}
-		[^finParentesis] {System.out.print(yytext());}		
+		[^finParentesis] {}		
 	   }

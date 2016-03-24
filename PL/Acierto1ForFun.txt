@@ -1,0 +1,16 @@
+program acierto1ForFun;
+function factorial ( num : INTEGER ) : INTEGER;
+var 
+	id,total : INTEGER;
+begin
+	for id:=1 to num do
+		total := total + id;
+	factorial:=total;
+end;
+var
+	input: INTEGER;
+	output: INTEGER;
+begin
+	input := 6;
+	output:= factorial(input);
+end.

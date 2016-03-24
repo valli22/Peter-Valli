@@ -1,0 +1,9 @@
+program falloArgumentos;
+var
+	test: CHARACTER;
+	output: REAL;
+begin
+	test:= 'nuevo ''char''';
+	{con la gramatica dada no es posible realizar funciones ni procedimientos sin argumentos}
+	output := argumentos();
+end.

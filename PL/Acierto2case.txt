@@ -1,0 +1,30 @@
+program acierto2Case;
+procedure comenzarJuego(start: INTEGER);
+begin
+	start:= not start;
+end;
+procedure reiniciarJuego(restart: INTEGER);
+begin
+	restart:= not restart;
+end;
+procedure opciones(menuOpciones: INTEGER);
+begin
+	menuOpciones:= not menuOpciones;
+end;
+var
+	start, restart, menuOpciones : INTEGER;
+	menu : CHARACTER;
+begin
+	{se utilizan argumentos en forma de integers como booleans puesto que no estan definidos los booleans en la gramatica}
+	start:=0;
+	restart:=0;
+	menuOpciones:=0;
+	case menu of
+		play: comenzarJuego(start);
+		;
+		reset: reiniciarJuego(restart);
+		;
+		options: opciones(menuOpciones);
+		;		
+	end
+end.

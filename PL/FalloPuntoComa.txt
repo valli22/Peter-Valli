@@ -1,0 +1,12 @@
+program falloPuntoComa;
+function holaPersona ( persona : CHARACTER ) : CHARACTER;
+begin
+	holaPersona := 'Hola especial'''+persona+''', te mandamos un saludo';
+end;
+var
+	holaOutput,nombre : CHARACTER;	
+begin
+	nombre:='Miguel';
+	{Olvido del punto y coma en una sentencia y fallo}
+	holaOutput:=holaPersona(nombre)
+end.

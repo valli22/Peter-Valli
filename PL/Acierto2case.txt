@@ -15,7 +15,7 @@ var
 	start, restart, menuOpciones : INTEGER;
 	menu : CHARACTER;
 begin
-	{se utilizan argumentos en forma de integers como booleans puesto que no estan definidos los booleans en la gramatica}
+	(*se utilizan argumentos en forma de integers como booleans puesto que no estan definidos los booleans en la gramatica*)
 	start:=0;
 	restart:=0;
 	menuOpciones:=0;

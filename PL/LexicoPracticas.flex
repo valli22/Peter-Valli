@@ -17,11 +17,12 @@ constNumInt = [+-]?[0-9]+
 constNumReal = [+-]?[0-9]+"."[0-9]+
 constNumIntH = "$"[+-]?[A-F0-9]+
 constNumRealH = "$"[+-]?[A-F0-9]+"."[A-F0-9]+
-finParentesis = "*"")"
+principioParentesis = "(""*"
 
 %xstate constLit
 %xstate comentPar
 %xstate comentLlav
+%xstate comentParFin
 
 %%
 
@@ -32,7 +33,7 @@ finParentesis = "*"")"
 
 "'" {litconst=""; yybegin(constLit);}
 "{" {yybegin(comentLlav);}
-"(*" {yybegin(comentPar);}
+{principioParentesis} {yybegin(comentPar);}
 
 "begin" {return new java_cup.runtime.Symbol(sym.begin,yyline+1,yycolumn+1,yytext());}
 "end" {return new java_cup.runtime.Symbol(sym.end,yyline+1,yycolumn+1,yytext());}
@@ -99,6 +100,11 @@ finParentesis = "*"")"
 	    }
 
 <comentPar>{
-		{finParentesis} {yybegin(YYINITIAL);}
-		[^finParentesis] {}		
+		"*" {yybegin(comentParFin);}
+		[^*] {}		
+	   }
+
+<comentParFin>{
+		")" {yybegin(YYINITIAL);}
+		[^)] {yybegin(comentPar);}		
 	   }

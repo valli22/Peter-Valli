@@ -81,10 +81,9 @@ principioParentesis = "(""*"
 ")" {return new java_cup.runtime.Symbol(sym.parentesisder,yyline+1,yycolumn+1,yytext());}
 "[" {return new java_cup.runtime.Symbol(sym.corcheteizq,yyline+1,yycolumn+1,yytext());}
 "]" {return new java_cup.runtime.Symbol(sym.corcheteder,yyline+1,yycolumn+1,yytext());}
-" " {}
-[^.] {}
+(" "|\n|\t|\r)+	{}
 {identificador} {return new java_cup.runtime.Symbol(sym.id,yyline+1,yycolumn+1,yytext());}
-. {System.out.println("Lexical Error: \""yytext()+"\" do not belong to the alphabet. Line: "+ yyline+1 +" Column: "+ yycolumn+1);}
+. {System.out.println("Lexical Error: \"" + yytext()+ "\" line: "+(yyline+1)+" column: "+(yycolumn+1)+", do not belong to the alphabet");}
 
 
 <constLit>{

@@ -1,0 +1,15 @@
+program Acierto3;
+{fallo al poner la palabra reservada var en mayuscula}
+VAR
+	pruebasF:CHARACTER;
+
+type
+	pruebas3 = record
+		pruebas4 : REAL;
+		pruebas5 : CHARACTER
+	end;
+	pruebas5 = array [0..10] of INTEGER;
+begin
+	pruebas3.pruebas4 := pruebas3.pruebas4 + $12.AF;
+	pruebas3.pruebas5 := primerFunction;
+end.

@@ -1,0 +1,21 @@
+program Acierto3;
+
+(* procedure sin parentesis esta admitido en la gramatica dada *)
+procedure primerProcedure;
+var
+	pruebas:REAL;
+begin
+	pruebas := 12.32;
+	pruebas2 := pruebas;
+end;
+
+var 
+	pruebas3 : INTEGER;
+begin
+	pruebas3 := not ($-1A);
+	pruebas4 := primerProcedure;
+	{probamos el while aunque la expresion que la gobierne no es un boolean
+	la gramatica debe aceptarlo}
+	while pruebas4 do
+		pruebas4 := not pruebas4;
+end.

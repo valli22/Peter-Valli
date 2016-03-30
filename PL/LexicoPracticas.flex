@@ -83,8 +83,8 @@ principioParentesis = "(""*"
 "]" {return new java_cup.runtime.Symbol(sym.corcheteder,yyline+1,yycolumn+1,yytext());}
 " " {}
 [^.] {}
-
 {identificador} {return new java_cup.runtime.Symbol(sym.id,yyline+1,yycolumn+1,yytext());}
+. {System.out.println("Lexical Error: \""yytext()+"\" do not belong to the alphabet. Line: "+ yyline+1 +" Column: "+ yycolumn+1);}
 
 
 <constLit>{

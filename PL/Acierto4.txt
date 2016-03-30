@@ -1,0 +1,22 @@
+program Acierto3;
+
+(* funcition sin parametros de entrada esta admitido en la gramatica dada *)
+function primerFunction:CHARACTER;
+var
+	pruebasF:CHARACTER;
+begin
+	pruebasF := 'esto ''es'' una prueba';
+	for prueba := 0 to -34 do
+		pruebasF := 'h';
+end;
+{prueba de tipos}
+type
+	pruebas3 = record
+		pruebas4 : REAL;
+		pruebas5 : CHARACTER
+	end;
+	pruebas5 = array [0..10] of INTEGER;
+begin
+	pruebas3.pruebas4 := pruebas3.pruebas4 + $12.AF;
+	pruebas3.pruebas5 := primerFunction;
+end.

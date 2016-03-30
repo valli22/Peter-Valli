@@ -1,0 +1,13 @@
+program Acierto3;
+
+type
+	pruebas3 = record
+		pruebas4 : REAL;
+		pruebas5 : CHARACTER
+	end;
+	pruebas5 = array [0..10] of INTEGER;
+begin
+	{fallo al escribir un numero hexadecimal con signo mal posicionado}
+	pruebas3.pruebas4 := -$12.AF;
+	pruebas3.pruebas5 := primerFunction;
+end.

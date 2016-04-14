@@ -1,110 +1,53 @@
 import cv2
 import numpy as np
-
-training = []
-# Lectura de imagenes
-for i in range(1, 49):
-    dir = "C:\Users\pdred\Desktop\VA\Practica 1/training/training/frontal_" + str(i) + ".jpg"
-    I = cv2.imread(dir, 0)
-    training.append(I)
-
-# video = cv2.VideoCapture('C:\Users\pdred\Desktop\VA\Practica 1\Videos\Videos/video2.wmv')
-# while not video.isOpened():
-#     video = cv2.VideoCapture('C:\Users\pdred\Desktop\VA\Practica 1\Videos\Videos/video2.wmv')
-#     cv2.waitKey(1000)
-#     print "esperando.."
-#
-# pos_frame = video.get(cv2.cv.CV_CAP_PROP_POS_FRAMES)
-# while True:
-#     flag,frame = video.read()
-#     if flag:
-#         cv2.imshow("Video",frame)
-#         pos_frame= video.get(cv2.cv.CV_CAP_PROP_POS_FRAMES)
-#         print str(pos_frame)+" frames"
-#     else:
-#         video.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, pos_frame-1)
-#         print "frame is not ready"
-#         cv2.waitKey(1000)
-#     if cv2.waitKey(10) == 27:
-#         break
-#     if video.get(cv2.cv.CV_CAP_PROP_POS_FRAMES)== video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT):
-#         break
+import entrada_salida as io
+import centro_coche as cc
+import cascadeClassifier as ccl
+import videoCapture as vc
 
 
-# Entrenamiento del clasificador por flann con lsh
-FLANN_INDEX_LSH = 0
-index_params = dict(algorithm=FLANN_INDEX_LSH, table_numer=6, key_size=12, multi_prove_level=1)
-search_params = dict(checks=100)
-flann = cv2.FlannBasedMatcher(indexParams=index_params, searchParams=search_params)
+opcion = raw_input('Que accion desea realizar? (1=Centro de coche/2=Rectangulo cascade/3=Decteccion en video) ->')
+if opcion == '1':
 
-kps = []
-descriptores = []
-vectoresVotacion = []
-for im1 in training:
-    orb = cv2.ORB(100, 1.3, 4)
-    kp, des = orb.detectAndCompute(im1, None)
+    procesador = cc.Centro_coche()
 
-    for x, keypoint in enumerate(kp):
-        kps.append(keypoint)
-        vectoresVotacion.append((110 - keypoint.pt[1], 225 - keypoint.pt[0]))
-    descriptores.append(des)
-    flann.add(np.asarray(des, np.float32))
+    path = raw_input('Escriba el directorio de donde desee coger las imagenes de entrenamiento: ')
+    training = io.Entrada_salida(path).datos_Path()
+    procesador.entrenamiento(training)
 
-flann.train()
+    path = raw_input('Escriba el directorio de donde desee coger las imagenes a procesar: ')
+    testing = io.Entrada_salida(path).datos_Path()
+    imgs = procesador.procesamiento(testing)
 
-# Procesamiento de imagen
+    for x,img in enumerate(imgs):
+        cv2.imshow('Imagen '+str(x), img)
+        cv2.waitKey()
 
+elif opcion=='2':
+    pathXML = raw_input('Introduzca el path donde se encuentre el haar con el que quiera detectar el coche: ')
+    cascade = ccl.CascadeClassifier(pathXML)
+    path = raw_input('Escriba el directorio de donde desee coger las imagenes a procesar: ')
+    testing = io.Entrada_salida(path).datos_Path()
+    imgs = cascade.procesamiento(testing,(100,100))
+    for x,img in enumerate(imgs):
+        cv2.imshow('Imagen '+str(x), img)
+        cv2.waitKey()
 
-test = []
-for i in range(1, 10):
-    dir = "C:\Users\pdred\Desktop\VA\Practica 1/testing/testing/test" + str(i) + ".jpg"
-    I = cv2.imread(dir, 0)
-    test.append(I)
+elif opcion=='3':
+    videoCapture = vc.VideoCapture()
+    opcion = raw_input('Procesar mediante cascade(1) o mediante busqueda del centro del coche(2): ')
+    if opcion=='1':
+        path = raw_input('Introduzca el path donde se encuentre el video que quiera procesar: ')
+        pathXML = raw_input('Introduzca el path donde se encuentre el haar con el que quiera detectar el coche: ')
+        videoCapture.procesamientoCascade(path,pathXML)
+    elif opcion=='2':
+        path = raw_input('Introduzca el path donde se encuentre el video que quiera procesar: ')
+        pathTrain = raw_input('Escriba el directorio de donde desee coger las imagenes de entrenamiento: ')
+        training = io.Entrada_salida(pathTrain).datos_Path()
+        videoCapture.procesamientoCentro(path,training)
 
-kpsTest = []
-descriptoresTest = []
+    else:
+        print 'Opcion de tipo de procesado incorrecta. 1 o 2'
+else:
+    print 'Opcion incorrecta -> elija 1,2 o 3'
 
-for im1 in test:
-    vectorVotacion = np.zeros((im1.shape[0] / 10, im1.shape[1] / 10), dtype=np.int)
-
-    # Primero sacar los descriptores de las imagenes de test
-    kp, des = orb.detectAndCompute(im1, None)
-
-    # Indices de los descriptores
-    indices = flann.knnMatch(np.asarray(des, np.float32), k=6)
-
-    # Por cada keypoint realizamos la votacion de donde se cree que esta el centro
-    for x, keypoint in enumerate(kp):
-        for indice in indices[x]:
-            col = int(
-                vectoresVotacion[indice.trainIdx][0] * (keypoint.size / kps[indice.trainIdx].size) + keypoint.pt[0])
-            row = int(
-                vectoresVotacion[indice.trainIdx][1] * (keypoint.size / kps[indice.trainIdx].size) + keypoint.pt[1])
-
-            col = np.ceil(col / 10)
-            row = np.ceil(row / 10)
-
-            if col >= 0 and col < im1.shape[1] / 10:
-                if row >= 0 and row < im1.shape[0] / 10:
-                    vectorVotacion[row][col] += 1
-
-    # Detectamos el punto max de la matriz de votacion
-    punto = 0
-    locPunto = (0, 0)
-    for x, fila in enumerate(vectorVotacion):
-        for y in range(0, len(fila)):
-            if fila[y] >= punto:
-                punto = fila[y]
-                locPunto = (x, y)
-
-    # Deteccion y dibujado de rectangulo alrededor del frontal del coche
-    cascada = cv2.CascadeClassifier('C:\Users\pdred\Desktop\VA\Practica 1\haar\haar/coches.xml', )
-    rectangulos = cascada.detectMultiScale(im1, minNeighbors=2, scaleFactor=1.4, minSize=(100, 100))
-    for rect in rectangulos:
-        x, y, w, h = rect
-        print x, y, w, h
-        cv2.rectangle(im1, (x, y + h), (x + w, y), (0, 255, 0))
-    cv2.imshow("Prueba", im1)
-    cv2.waitKey()
-
-#Hacer funcion  para coger las imagenes y que te devuelva un array de estas en blanco y negro

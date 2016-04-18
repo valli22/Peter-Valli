@@ -1,4 +1,5 @@
 import java_cup.runtime.*;
+import htmlClasses.*;
 parser code
 {:
 public void syntax_error(Symbol cur_token){
@@ -6,33 +7,34 @@ System.err.println("An error has been detected on \" "+cur_token.value+" \" whos
 this.report_expected_token_ids();
 }
 :}
-terminal real, punto, tint, tchar, program, begin, end, tconst, var, procedure, function, div, mod, or, and, not, type, array, of, record, tif, then, telse, twhile, tdo, tfor, to, tcase, coma, puntocoma, igual, mas, dospuntos, puntopunto, asignacion, mayor, menos, menor, menorigual, mayorigual, distinto, por, parentesisizq, parentesisder, corcheteizq, corcheteder, id, constlit, constnumint, constnumreal;
-non terminal EXPAUX, PRG, BLQ, DCLLIST, DCL, SENTLIST, SENT, DEFCTE, DEFVAR, DEFPROC, DEFFUN, CTELIST, SIMPVALUE, DEFVARLIST, VARLIST, TBAS, FORMAL_PARAMLIST, FORMAL_PARAM, ASIG, PROC_CALL, EXEBLQ, ID, EXP, OP, FACTOR, OPCOMP, OPLOG, OPARIT, SUBPPARAMLIST, EXPLIST, DCLLIST_BLQ, DCL_BLQ, DEFTYPE, TYPELIST, UDTYPE, ALLTYPES, COND, ELSECOND, WLOOP, FLOOP, CASE, CASELIST;
-PRG::= program id puntocoma BLQ punto;
-BLQ::= DCLLIST begin SENTLIST end;
+terminal String real, punto, tint, tchar, program, begin, end, tconst, var, procedure, function, div, mod, or, and, not, type, array, of, record, tif, then, telse, twhile, tdo, tfor, to, tcase, coma, puntocoma, igual, mas, dospuntos, puntopunto, asignacion, mayor, menos, menor, menorigual, mayorigual, distinto, por, parentesisizq, parentesisder, corcheteizq, corcheteder, id, constlit, constnumint, constnumreal;
+non terminal Nt EXPAUX, PRG, BLQ, DCL, SENTLIST, SENT, DEFCTE, DEFVAR, DEFPROC, DEFFUN, CTELIST, SIMPVALUE, DEFVARLIST, VARLIST, TBAS, FORMAL_PARAMLIST, FORMAL_PARAM, ASIG, PROC_CALL, EXEBLQ, ID, EXP, OP, FACTOR, OPCOMP, OPLOG, OPARIT, SUBPPARAMLIST, EXPLIST, DCLLIST_BLQ, DCL_BLQ, DEFTYPE, TYPELIST, UDTYPE, ALLTYPES, COND, ELSECOND, WLOOP, FLOOP, CASE, CASELIST;
+non terminal Dcllist DCLLIST;
+PRG::= program id:valorid puntocoma BLQ:valorBLQ punto{: /*H1 h1 = new H1(valorid); Nt nt = new Nt(h1+"<h2>Funciones y procedimientos</h2>"+valorBLQ.value+"."); Html html = new Html(nt.value);System.out.println(html);*/ :};
+BLQ::= DCLLIST:valorDCLLIST begin SENTLIST:valorSENTLIST end {: /*Ul ul = new Ul(valorDCLLIST.cabeceras); RESULT = new Nt(ul.value+"begin"+valorSENTLIST.value+"end");*/ :};
 DCLLIST::= DCLLIST DCL | ;
 SENTLIST::= SENT | SENTLIST SENT;
 DCL::= DEFCTE | DEFVAR | DEFPROC | DEFFUN | DEFTYPE;
 DEFCTE::= tconst CTELIST;
 CTELIST::= id igual SIMPVALUE puntocoma | CTELIST id igual SIMPVALUE puntocoma;
-SIMPVALUE::= constnumint | constnumreal | constlit;
+SIMPVALUE::= constnumint:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | constnumreal:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | constlit:valor {:System.out.println(valor); RESULT = new Nt(valor); :};
 DEFVAR::= var DEFVARLIST puntocoma;
 DEFVARLIST::= VARLIST dospuntos ALLTYPES | DEFVARLIST puntocoma VARLIST dospuntos ALLTYPES;
-VARLIST::= id | id coma VARLIST;
+VARLIST::= id:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | id coma VARLIST;
 DEFPROC::= procedure id FORMAL_PARAMLIST puntocoma BLQ puntocoma;
 DEFFUN::= function id FORMAL_PARAMLIST dospuntos ALLTYPES puntocoma BLQ puntocoma;
 FORMAL_PARAMLIST::= parentesisizq FORMAL_PARAM parentesisder | ;
 FORMAL_PARAM::= VARLIST dospuntos ALLTYPES | VARLIST dospuntos ALLTYPES puntocoma FORMAL_PARAM;
-TBAS::= tint | real | tchar;
+TBAS::= tint:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | real:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | tchar:valor {:System.out.println(valor); RESULT = new Nt(valor); :};
 SENT::= ASIG puntocoma | PROC_CALL puntocoma | EXEBLQ | WLOOP | FLOOP | CASE;
 ASIG::= ID asignacion EXP;
-ID::= id | id corcheteizq EXP corcheteder | id punto id;
+ID::= id:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | id corcheteizq EXP corcheteder | id punto id;
 EXP::= FACTOR EXPAUX;
 EXPAUX::= OP EXP | ;
 OP::= OPCOMP | OPLOG | OPARIT;
-OPCOMP::= menor | mayor | menorigual | mayorigual | igual | distinto;
-OPARIT::= mas | menos | por | div | mod;
-OPLOG::= or | and;
+OPCOMP::= menor:valor {: System.out.println(valor); RESULT = new Nt(valor); :}| mayor.valor {: System.out.println(valor); RESULT = new Nt(valor); :}| menorigual:valor {:System.out.println(valor); RESULT = new Nt(valor); :}| mayorigual:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | igual:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | distinto:valor {:System.out.println(valor); RESULT = new Nt(valor); :};
+OPARIT::= mas:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | menos:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | por:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | div:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | mod:valor {:System.out.println(valor); RESULT = new Nt(valor); :};
+OPLOG::= or:valor {:System.out.println(valor); RESULT = new Nt(valor); :} | and:valor {:System.out.println(valor); RESULT = new Nt(valor); :};
 FACTOR::= SIMPVALUE | not FACTOR | parentesisizq EXP parentesisder | id SUBPPARAMLIST | id corcheteizq EXP corcheteder | id punto id;
 SUBPPARAMLIST::= parentesisizq EXPLIST parentesisder | ;
 EXPLIST::= EXP | EXP coma EXPLIST;

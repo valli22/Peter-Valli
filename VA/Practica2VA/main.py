@@ -1,18 +1,29 @@
 import cv2
 import numpy as np
 import os
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import localizacionDigitos as ld
 
 #Carga de imagenes de entrenamiento
 training = []
+C = []
+E = []
 path = 'C:\Users\pdred\Desktop\VA\Practica2/training_ocr/training_ocr'
 for (dirpath, dirname, filename) in os.walk(path):
     for file in filename:
         pathFile = path +'/'+file
         I = cv2.imread(pathFile,0)
         training.append(I)
-        # thresh = ld.LocalizacionDigitos(I)
-        # thresh.caracter()
+        thresh = ld.LocalizacionDigitos(I)
+        M =thresh.caracter()
+        C.append(M)
+
+        E.append(file.split('_')[0])
+
+sklearn_lda = LDA(n_components=2)
+CR = sklearn_lda.fit_transform(C,E)
+
+print CR
 
 # Carga de imagenes de test
 testing = []

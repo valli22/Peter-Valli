@@ -7,8 +7,10 @@ action code
 {:
 private Integer cont = 0;
 private ArrayList<String> cabeceras = new ArrayList<>();
+private String tipos = "";
+private String funciones = "";
 private String listaCabeceras(){
-	String s = "<ul>\n<a name=\"inicio\">";
+	String s = "<ul>\n<a name=\"inicio\"></a>";
 	for(int i = 0;i<this.cabeceras.size();i++){
 		s+="<li>\n<a href=\"#"+this.cabeceras.get(i).split(" ")[1]+"\">"+this.cabeceras.get(i)+"</a>\n</li>\n";
 	};
@@ -24,10 +26,10 @@ private void writeHtml(String codigo){
 		ps = new PrintStream(nuevoArchivo);
 		String s = "<html>\n"
                 + "<head>\n"
-                    +"<tittle>"+"prueba"+"</tittle>\n"
+                    +"<title>"+"prueba"+"</title>\n"
                     + "<style>\n"
                         + ".cte {color:rgb(19,189,72);}\n"
-                        + ".indent {color:rgb(55,40,244);}\n"
+                        + ".ident {color:rgb(55,40,244);}\n"
                         + ".palres {color:rgb(0,0,0);font-weight:bold;}\n"
                     + "</style>\n<style type=\"text/css\"></style>"
                 + "</head>\n"
@@ -51,23 +53,23 @@ this.report_expected_token_ids();
 :}
 terminal String real, punto, tint, tchar, program, begin, end, tconst, var, procedure, function, div, mod, or, and, not, type, array, of, record, tif, then, telse, twhile, tdo, tfor, to, tcase, coma, puntocoma, igual, mas, dospuntos, puntopunto, asignacion, mayor, menos, menor, menorigual, mayorigual, distinto, por, parentesisizq, parentesisder, corcheteizq, corcheteder, id, constlit, constnumint, constnumreal;
 non terminal Nt AUX, EXPAUX, PRG, BLQ, DCL, SENTLIST, SENT, DEFCTE, DEFVAR, DEFPROC, DEFFUN, CTELIST, SIMPVALUE, DEFVARLIST, VARLIST, TBAS, FORMAL_PARAMLIST, FORMAL_PARAM, ASIG, PROC_CALL, EXEBLQ, ID, EXP, OP, FACTOR, OPCOMP, OPLOG, OPARIT, SUBPPARAMLIST, EXPLIST, DCLLIST_BLQ, DCL_BLQ, DEFTYPE, TYPELIST, UDTYPE, ALLTYPES, COND, ELSECOND, WLOOP, FLOOP, CASE, CASELIST, DCLLIST;
-PRG::= program id:valorid puntocoma BLQ:valorBLQ punto {: String s = "<a name=\"Inicio\"><h1>Programa: "+"prueba"+"</h1></a><br><h2>Funciones y procedimientos</h2>"+listaCabeceras(); s+=valorBLQ.value; writeHtml(s); :};
-BLQ::= DCLLIST:valorDCLLIST begin AUX SENTLIST:valorSENTLIST end {: String s; RESULT = new Nt(valorDCLLIST.value+"<br><span class=\"palres\">begin</span>"+valorSENTLIST.value+"<span class=\"palres\">end</span>"); this.cont--;:};
+PRG::= program id:valorid puntocoma BLQ:valorBLQ punto {: String s = "<a name=\"Inicio\"><h1>Programa: "+"prueba"+"</h1></a><h2>Funciones y procedimientos</h2>"+listaCabeceras(); s+=valorBLQ.value+"<a href=\"#progPpal\">Inicio del programa principal</a><br><a href=\"#inicio\">Inicio programa</a><br>"; writeHtml(s); :};
+BLQ::= DCLLIST:valorDCLLIST begin AUX SENTLIST:valorSENTLIST end {: RESULT = new Nt(this.funciones+"<a name=\"progPpal\"><h2>Programa Principal</h2></a>"+this.tipos+"<br><span class=\"palres\">begin</span>"+valorSENTLIST.value+"<span class=\"palres\">end</span>"); this.cont--;:};
 DCLLIST::= DCLLIST:valorDCLL DCL:valorDCL {: RESULT = new Nt(valorDCLL.value+valorDCL.value); :} | {: RESULT = new Nt(""); :};
 SENTLIST::= SENT:valor {: RESULT = new Nt(valor.value); :} | SENTLIST:valorSENTL SENT:valorSENT {: RESULT = new Nt(valorSENTL.value+valorSENT.value); :};
-DCL::= DEFCTE:valor {: RESULT = new Nt(valor.value); :} | DEFVAR:valor {: RESULT = new Nt(valor.value); :}| DEFPROC:valor {: RESULT = new Nt(valor.value); :}| DEFFUN:valor {: RESULT = new Nt(valor.value); :}| DEFTYPE:valor {: RESULT = new Nt(valor.value); :};
+DCL::= DEFCTE:valor {: this.tipos+=valor.value; RESULT = new Nt(valor.value); :} | DEFVAR:valor {: this.tipos+=valor.value; RESULT = new Nt(valor.value); :}| DEFPROC:valor {: this.funciones+=valor.value; RESULT = new Nt(valor.value); :}| DEFFUN:valor {: this.funciones+=valor.value; RESULT = new Nt(valor.value); :}| DEFTYPE:valor {: this.tipos+=valor.value; RESULT = new Nt(valor.value); :};
 DEFCTE::= tconst CTELIST:valorCTE {: RESULT = new Nt("<span class=\"palres\">const </span>"+valorCTE.value); :};
 CTELIST::= id:valor igual:valorigual SIMPVALUE:valorSIMP puntocoma {: RESULT = new Nt("<a name=\""+valor+"\">"+valor+"</a>"+valorigual+valorSIMP.value+";<br>"); :}| CTELIST:valorCTE id:valor igual:valorigual SIMPVALUE:valorSIMP puntocoma {: RESULT = new Nt(valorCTE.value+valor+valorigual+valorSIMP.value+";<br>"); :};
 SIMPVALUE::= constnumint:valor {:RESULT = new Nt("<span class=\"cte\">"+valor+"</span>"); :} | constnumreal:valor {:RESULT = new Nt("<span class=\"cte\">"+valor+"</span>"); :} | constlit:valor {:RESULT = new Nt("<span class=\"cte\">"+valor+"</span>"); :};
 DEFVAR::= var DEFVARLIST:valorDEF puntocoma {: RESULT = new Nt("<span class=\"palres\">var </span>"+valorDEF.value+";<br>"); :};
 DEFVARLIST::= VARLIST:valorVAR dospuntos:valorpunto ALLTYPES:valorALLT {: RESULT = new Nt(valorVAR.value+valorpunto+valorALLT.value); :}| DEFVARLIST:valorDEF puntocoma VARLIST:valorVAR dospuntos:valorpunto ALLTYPES:valorALLT {: RESULT = new Nt(valorDEF.value+";<br>"+valorVAR.value+valorpunto+valorALLT.value); :};
-VARLIST::= id:valor {:RESULT = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"); :} | id:valor coma VARLIST:valorVAR {: RESULT = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a> ,"+valorVAR.value); :};
-DEFPROC::= procedure:valor1 id:valor FORMAL_PARAMLIST:valorFORMAL puntocoma BLQ:valorBLQ puntocoma {: this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.value); RESULT = new Nt("<span class=\"palres\">procedure </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+";<br>"+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); :};
-DEFFUN::= function:valor1 id:valor FORMAL_PARAMLIST:valorFORMAL dospuntos:valorpunto ALLTYPES:valorALLT puntocoma BLQ:valorBLQ puntocoma {: this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.value+" "+valorpunto+" "+valorALLT.value); RESULT = new Nt("<span class=\"palres\">function </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+" "+valorpunto+valorALLT.value+"; "+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); :};
-FORMAL_PARAMLIST::= parentesisizq FORMAL_PARAM:valor parentesisder {: RESULT = new Nt("("+valor.value+")"); :}| {: RESULT = new Nt(""); :};
-FORMAL_PARAM::= VARLIST:valorVARL dospuntos:valor ALLTYPES:valorALLT {: RESULT = new Nt(valorVARL.value+valor+valorALLT.value); :}| VARLIST:valorVARL dospuntos:valor ALLTYPES:valorALLT puntocoma FORMAL_PARAM:valorFORM {: RESULT = new Nt(valorVARL.value+valor+valorALLT.value+";<br>"+valorFORM.value); :};
+VARLIST::= id:valor {: Nt nt = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"); nt.setValueNoHtml("<span class=\"ident\">"+valor+"</span>"); RESULT = nt; :} | id:valor coma VARLIST:valorVAR {: Nt nt = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a> ,"+valorVAR.value); nt.setValueNoHtml("<span class=\"ident\">"+valor+"</span>");RESULT = nt; :};
+DEFPROC::= procedure:valor1 id:valor FORMAL_PARAMLIST:valorFORMAL puntocoma BLQ:valorBLQ puntocoma {: this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.valueNoHtml); RESULT = new Nt("<span class=\"palres\">procedure </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+";<br>"+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); :};
+DEFFUN::= function:valor1 id:valor FORMAL_PARAMLIST:valorFORMAL dospuntos:valorpunto ALLTYPES:valorALLT puntocoma BLQ:valorBLQ puntocoma {: this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.valueNoHtml+" "+valorpunto+" "+valorALLT.value); RESULT = new Nt("<span class=\"palres\">function </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+" "+valorpunto+valorALLT.value+"; "+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); :};
+FORMAL_PARAMLIST::= parentesisizq FORMAL_PARAM:valor parentesisder {: Nt nt = new Nt("("+valor.value+")"); nt.setValueNoHtml("("+valor.valueNoHtml+")");RESULT = nt; :}| {: RESULT = new Nt(""); :};
+FORMAL_PARAM::= VARLIST:valorVARL dospuntos:valor ALLTYPES:valorALLT {: Nt nt = new Nt(valorVARL.value+valor+valorALLT.value); nt.setValueNoHtml(valorVARL.valueNoHtml+valor+valorALLT.value);RESULT = nt; :}| VARLIST:valorVARL dospuntos:valor ALLTYPES:valorALLT puntocoma FORMAL_PARAM:valorFORM {: Nt nt = new Nt(valorVARL.value+valor+valorALLT.value+";<br>"+valorFORM.value); nt.setValueNoHtml(valorVARL.valueNoHtml+valor+valorALLT.value+";"+valorFORM.value); RESULT = nt; :};
 TBAS::= tint:valor {:RESULT = new Nt("<span class=\"palres\">"+valor+"</span>"); :} | real:valor {:RESULT = new Nt("<span class=\"palres\">"+valor+"</span>"); :} | tchar:valor {:RESULT = new Nt("<span class=\"palres\">"+valor+"</span>"); :};
-SENT::= ASIG:valorASIG puntocoma {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorASIG.value+";</div><br>"); :}| PROC_CALL:valorPROCCALL puntocoma {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorPROCCALL.value+";</div><br>"); :}| EXEBLQ:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| WLOOP:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| FLOOP:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| CASE:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :};
+SENT::= ASIG:valorASIG puntocoma {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorASIG.value+";</div>"); :}| PROC_CALL:valorPROCCALL puntocoma {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorPROCCALL.value+";</div>"); :}| EXEBLQ:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| WLOOP:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| FLOOP:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :}| CASE:valor {: RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valor.value+"</div>"); :};
 ASIG::= ID:valorID asignacion:asig EXP:valorEXP {: RESULT = new Nt(valorID.value+asig+valorEXP.value); :};
 ID::= id:valor {:RESULT = new Nt("<a href=\"#"+valor+"\"><span class=\"ident\">"+valor+"</span></a>"); :} | id:valor corcheteizq EXP:valorEXP corcheteder {: RESULT = new Nt("<a href=\"#"+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+"["+valorEXP+"]"); :}| id:valor1 punto id:valor2 {: RESULT = new Nt("<a href=\"#"+valor1+"\"><span class=\"ident\">"+valor1+"</span></a>"+"."+"<a href=\"#"+valor2+"\"><span class=\"ident\">"+valor2+"</span></a>"); :};
 EXP::= FACTOR:valorFACTOR EXPAUX:valorEXPAUX {:RESULT = new Nt(valorFACTOR.value+valorEXPAUX.value); :};

@@ -400,8 +400,10 @@ class CUP$parser$actions {
 
 private Integer cont = 0;
 private ArrayList<String> cabeceras = new ArrayList<>();
+private String tipos = "";
+private String funciones = "";
 private String listaCabeceras(){
-	String s = "<ul>\n<a name=\"inicio\">";
+	String s = "<ul>\n<a name=\"inicio\"></a>";
 	for(int i = 0;i<this.cabeceras.size();i++){
 		s+="<li>\n<a href=\"#"+this.cabeceras.get(i).split(" ")[1]+"\">"+this.cabeceras.get(i)+"</a>\n</li>\n";
 	};
@@ -417,12 +419,12 @@ private void writeHtml(String codigo){
 		ps = new PrintStream(nuevoArchivo);
 		String s = "<html>\n"
                 + "<head>\n"
-                    +"<tittle>"+"prueba"+"</tittle>\n"
+                    +"<title>"+"prueba"+"</title>\n"
                     + "<style>\n"
                         + ".cte {color:rgb(19,189,72);}\n"
-                        + ".indent {color:rgb(55,40,244);}\n"
+                        + ".ident {color:rgb(55,40,244);}\n"
                         + ".palres {color:rgb(0,0,0);font-weight:bold;}\n"
-                    + "</style>\n<style type=\"text//css\"></style>"
+                    + "</style>\n<style type=\"text/css\"></style>"
                 + "</head>\n"
                 + "<body>\n"
                     +codigo+"\n"
@@ -466,7 +468,7 @@ private void writeHtml(String codigo){
 		int valorBLQleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorBLQright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorBLQ = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 String s = listaCabeceras(); s+="<a name=\"Inicio\"><h1>Programa: "+prueba"+"</h1></a><br><h2>Funciones y procedimientos</h2>"+valorBLQ.value; writeHtml(s); 
+		 String s = "<a name=\"Inicio\"><h1>Programa: "+"prueba"+"</h1></a><h2>Funciones y procedimientos</h2>"+listaCabeceras(); s+=valorBLQ.value+"<a href=\"#progPpal\">Inicio del programa principal</a><br><a href=\"#inicio\">Inicio programa</a><br>"; writeHtml(s); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("PRG",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -495,7 +497,7 @@ private void writeHtml(String codigo){
 		int valorSENTLISTleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorSENTLISTright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorSENTLIST = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 String s; RESULT = new Nt(valorDCLLIST.value+"<br><span class=\"palres\">begin</span>"+valorSENTLIST.value+"<span class=\"palres\">end</span>"); this.cont--;
+		 RESULT = new Nt(this.funciones+"<a name=\"progPpal\"><h2>Programa Principal</h2></a>"+this.tipos+"<br><span class=\"palres\">begin</span>"+valorSENTLIST.value+"<span class=\"palres\">end</span>"); this.cont--;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BLQ",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -558,7 +560,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valor.value); 
+		 this.tipos+=valor.value; RESULT = new Nt(valor.value); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DCL",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -570,7 +572,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valor.value); 
+		 this.tipos+=valor.value; RESULT = new Nt(valor.value); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DCL",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -582,7 +584,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valor.value); 
+		 this.funciones+=valor.value; RESULT = new Nt(valor.value); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DCL",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -594,7 +596,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valor.value); 
+		 this.funciones+=valor.value; RESULT = new Nt(valor.value); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DCL",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -606,7 +608,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valor.value); 
+		 this.tipos+=valor.value; RESULT = new Nt(valor.value); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DCL",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -756,7 +758,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String valor = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = new Nt("<a name=\""+valor+"\">"+valor+"</a>"); 
+		 Nt nt = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"); nt.setValueNoHtml("<span class=\"ident\">"+valor+"</span>"); RESULT = nt; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VARLIST",14, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -771,7 +773,7 @@ private void writeHtml(String codigo){
 		int valorVARleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorVARright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valorVAR = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt("<a name=\""+valor+"\">"+valor+"</a> ,"+valorVAR.value); 
+		 Nt nt = new Nt("<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a> ,"+valorVAR.value); nt.setValueNoHtml("<span class=\"ident\">"+valor+"</span>");RESULT = nt; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("VARLIST",14, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -792,7 +794,7 @@ private void writeHtml(String codigo){
 		int valorBLQleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorBLQright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorBLQ = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.value); RESULT = new Nt("<span class=\"palres\">procedure </span>"+"<a name=\"+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+";<br>"+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); 
+		 this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.valueNoHtml); RESULT = new Nt("<span class=\"palres\">procedure </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+";<br>"+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFPROC",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -819,7 +821,7 @@ private void writeHtml(String codigo){
 		int valorBLQleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorBLQright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorBLQ = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.value+" "+valorpunto+" "+valorALLT.value); RESULT = new Nt("<span class=\"palres\">function </span>"+"<a name=\"+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+" "+valorpunto+valorALLT.value+"; "+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); 
+		 this.cabeceras.add(valor1+" "+valor+" "+valorFORMAL.valueNoHtml+" "+valorpunto+" "+valorALLT.value); RESULT = new Nt("<span class=\"palres\">function </span>"+"<a name=\""+valor+"\"><span class=\"ident\">"+valor+"</span></a>"+" "+valorFORMAL.value+" "+valorpunto+valorALLT.value+"; "+valorBLQ.value+";<br><a href=\"#"+valor+"\">Inicio de rutina</a><br><a href=\"#Inicio\">Inicio de programa</a><hr>"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("DEFFUN",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -831,7 +833,7 @@ private void writeHtml(String codigo){
 		int valorleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valor = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 RESULT = new Nt("("+valor.value+")"); 
+		 Nt nt = new Nt("("+valor.value+")"); nt.setValueNoHtml("("+valor.valueNoHtml+")");RESULT = nt; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FORMAL_PARAMLIST",16, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -858,7 +860,7 @@ private void writeHtml(String codigo){
 		int valorALLTleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorALLTright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valorALLT = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valorVARL.value+valor+valorALLT.value); 
+		 Nt nt = new Nt(valorVARL.value+valor+valorALLT.value); nt.setValueNoHtml(valorVARL.valueNoHtml+valor+valorALLT.value);RESULT = nt; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FORMAL_PARAM",17, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -879,7 +881,7 @@ private void writeHtml(String codigo){
 		int valorFORMleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int valorFORMright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nt valorFORM = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Nt(valorVARL.value+valor+valorALLT.value+";<br>"+valorFORM.value); 
+		 Nt nt = new Nt(valorVARL.value+valor+valorALLT.value+";<br>"+valorFORM.value); nt.setValueNoHtml(valorVARL.valueNoHtml+valor+valorALLT.value+";"+valorFORM.value); RESULT = nt; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FORMAL_PARAM",17, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -927,7 +929,7 @@ private void writeHtml(String codigo){
 		int valorASIGleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorASIGright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorASIG = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorASIG.value+";</div><br>"); 
+		 RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorASIG.value+";</div>"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENT",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -939,7 +941,7 @@ private void writeHtml(String codigo){
 		int valorPROCCALLleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int valorPROCCALLright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nt valorPROCCALL = (Nt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		 RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorPROCCALL.value+";</div><br>"); 
+		 RESULT = new Nt("<div style=\"text-indent: "+0.5*this.cont+"cm\">"+valorPROCCALL.value+";</div>"); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("SENT",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

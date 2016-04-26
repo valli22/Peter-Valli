@@ -15,7 +15,7 @@ for (dirpath, dirname, filename) in os.walk(path):
         I = cv2.imread(pathFile,0)
         training.append(I)
         thresh = ld.LocalizacionDigitos(I)
-        M =thresh.caracter()
+        M = thresh.caracter()
         C.append(M)
 
         E.append(file.split('_')[0])
@@ -23,7 +23,6 @@ for (dirpath, dirname, filename) in os.walk(path):
 sklearn_lda = LDA(n_components=2)
 CR = sklearn_lda.fit_transform(C,E)
 
-print CR
 
 # Carga de imagenes de test
 testing = []

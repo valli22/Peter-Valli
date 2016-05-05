@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import pl.PL;
+
 action code
 {:
 private Integer cont = 0;
@@ -21,13 +23,14 @@ private String listaCabeceras(){
 private void writeHtml(String codigo){
 	FileOutputStream nuevoArchivo;
 	PrintStream ps;
+	PL n = new PL();
 	try{
 		//nuevoArchivo = new FileOutputStream(argv[i]+".html");
-		nuevoArchivo = new FileOutputStream("Prueba.html");
+		nuevoArchivo = new FileOutputStream(n.programName+".html");
 		ps = new PrintStream(nuevoArchivo);
 		String s = "<html>\n"
                 + "<head>\n"
-                    +"<title>"+"prueba"+"</title>\n"
+                    +"<title>"+n.programName+"</title>\n"
                     + "<style>\n"
                         + ".cte {color:rgb(19,189,72);}\n"
                         + ".ident {color:rgb(55,40,244);}\n"

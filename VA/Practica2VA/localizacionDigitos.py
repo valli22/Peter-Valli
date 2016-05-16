@@ -19,12 +19,13 @@ class LocalizacionDigitos:
         contornosValidos=[]
         #cv2.drawContours(I,contornos,-1,(255,255,255),1)
         ars = []
+
         for ctn in contornos:
             x,y,w,h= cv2.boundingRect(ctn)
             ar =(w)*(h)
             if(self.threshold.shape[0]*0.25 < h) and (h>w):
-
                 ars.append((ar,[x,y,w,h]))
+
 
         ars.sort()
         ars.reverse()
@@ -33,12 +34,29 @@ class LocalizacionDigitos:
                 break
             contornosValidos.append(ctnaux)
 
-        for ctn in contornosValidos:
+        newContornos = []
+        while len(contornosValidos)!=0:
+            min = 99999
+            for i in contornosValidos:
+                if (i[1][0]<min):
+                    min = i[1][0]
+                    indice = i
+            contornosValidos.remove(indice)
+            newContornos.append(indice)
+
+        caracteres =[]
+        for ctn in newContornos:
             pto1 = (ctn[1][0],ctn[1][1])
             pto2 = (ctn[1][0]+ctn[1][2],ctn[1][1]+ctn[1][3])
-            cv2.rectangle(self.original,pto1,pto2,(255,255,255),1)
-        cv2.imshow('prueba',self.original)
-        cv2.waitKey()
+            newImg = self.threshold[pto1[1]:pto2[1],pto1[0]:pto2[0]]
+            newImg = cv2.resize(newImg,(10,10),interpolation=cv2.INTER_LINEAR)
+            M = []
+            for x in newImg:
+                for y in x:
+                    M.append(y)
+            caracteres.append(np.asarray(M,dtype=np.float32))
+            # cv2.rectangle(self.original,pto1,pto2,(255,255,255),1)
+        return caracteres
 
     def caracter(self):
         I = self.threshold.copy()
@@ -58,15 +76,14 @@ class LocalizacionDigitos:
                 ars.append((ar,[x,y,w,h]))
         ars.sort()
         ars.reverse()
+        # Recorte de la imagen del caracter
         if(len(ars)!=0):
             pto1 = (ars[0][1][0],ars[0][1][1])
             pto2 = (ars[0][1][0]+ars[0][1][2],ars[0][1][1]+ars[0][1][3])
             newImg = I[pto1[1]:pto2[1],pto1[0]:pto2[0]]
         else:
             newImg = self.threshold.copy()
-        # cv2.imshow('prueba',newImg)
-        # cv2.waitKey()
-
+        # Redimensionamos la imagen del caracter y devolvemos su matriz como un vector de caracteristicas
         newImg = cv2.resize(newImg,(10,10),interpolation=cv2.INTER_LINEAR)
         M = []
 
@@ -74,38 +91,3 @@ class LocalizacionDigitos:
             for y in x:
                 M.append(y)
         return M
-
-    def boundingBox(self,img):
-        ladoSuperior= -1
-        ladoInferior= -1
-        ladoIzquierdo = -1
-        ladoDerecho = -1
-        for i in range(0,img.shape[0]):
-            for x in range(0,img.shape[1]):
-                if img[i][x] == 0:
-                    ladoSuperior = i
-                    break
-            if(ladoSuperior!=-1):
-                break
-        for i in range(0,img.shape[1]):
-            for x in range(0,img.shape[0]):
-                if img[x][i] == 0:
-                    ladoIzquierdo = i
-                    break
-            if(ladoIzquierdo!=-1):
-                break
-        for i in range(img.shape[0]-1,-1,-1):
-            for x in range(img.shape[1]-1,-1,-1):
-                if img[i][x] == 0:
-                    ladoInferior = i
-                    break
-            if(ladoInferior!=-1):
-                break
-        for i in range(img.shape[1]-1,-1,-1):
-            for x in range(img.shape[0]-1,-1,-1):
-                if img[x][i] == 0:
-                    ladoDerecho = i
-                    break
-            if(ladoDerecho!=-1):
-                break
-        return (ladoSuperior,ladoIzquierdo,ladoDerecho,ladoInferior)

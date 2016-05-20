@@ -1,0 +1,28 @@
+Nombre imagen: coche.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 7415HDH Largo matricula / 2: 66
+Nombre imagen: coche.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 1W74FHDH Largo matricula / 2: 92
+Nombre imagen: cocheFrontal.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 6247FNS Largo matricula / 2: 66
+Nombre imagen: cocheFrontal.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 6247FNS Largo matricula / 2: 92
+Nombre imagen: coches.jpg Coordenadas centro matricula x: 47 y: 12 Matricula: I4Q52GRR Largo matricula / 2: 47
+Nombre imagen: coches.jpg Coordenadas centro matricula x: 47 y: 12 Matricula:  Largo matricula / 2: 47
+Nombre imagen: sta50002.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 8179DOH Largo matricula / 2: 92
+Nombre imagen: sta50003.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 4618CWJ Largo matricula / 2: 92
+Nombre imagen: sta50004.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: I1Z9HHW Largo matricula / 2: 66
+Nombre imagen: sta50007.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 5974CMT Largo matricula / 2: 92
+Nombre imagen: sta50009.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 9O84BRL Largo matricula / 2: 92
+Nombre imagen: sta50016.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 70I52BGK Largo matricula / 2: 92
+Nombre imagen: sta50017.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 70I52BGK Largo matricula / 2: 92
+Nombre imagen: sta50079.jpg Coordenadas centro matricula x: 66 y: 16 Matricula:  Largo matricula / 2: 66
+Nombre imagen: sta50092.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 0513DLGX Largo matricula / 2: 92
+Nombre imagen: sta50133.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 13470YB Largo matricula / 2: 66
+Nombre imagen: sta50135.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 2117CWP Largo matricula / 2: 92
+Nombre imagen: sta50163.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 293JCLF Largo matricula / 2: 66
+Nombre imagen: sta50163.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 29JJLLC Largo matricula / 2: 92
+Nombre imagen: sta50185.jpg Coordenadas centro matricula x: 47 y: 12 Matricula: WA Largo matricula / 2: 47
+Nombre imagen: sta50185.jpg Coordenadas centro matricula x: 66 y: 16 Matricula:  Largo matricula / 2: 66
+Nombre imagen: sta50187.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: UZ1ZDHW Largo matricula / 2: 92
+Nombre imagen: sta50188.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: Z8M1FF Largo matricula / 2: 66
+Nombre imagen: test2.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 3565 Largo matricula / 2: 66
+Nombre imagen: test3.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: 8712HJG Largo matricula / 2: 66
+Nombre imagen: test5.jpg Coordenadas centro matricula x: 47 y: 12 Matricula: IL189BM Largo matricula / 2: 47
+Nombre imagen: test5.jpg Coordenadas centro matricula x: 66 y: 16 Matricula: YIIM Largo matricula / 2: 66
+Nombre imagen: test6.jpg Coordenadas centro matricula x: 92 y: 23 Matricula: 9978HKG Largo matricula / 2: 92

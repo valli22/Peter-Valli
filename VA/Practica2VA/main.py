@@ -58,14 +58,12 @@ fileopen = open(nombre+'.txt','w')
 
 pathHaar = raw_input('Introduzca la direccion del clasificador de matriculas:')
 for (dirpath, dirname, filename) in os.walk(path):
-    # Inicializamos un clasificador con uno ya entrenado para detectar matriculas
-
-
-    for p,file in enumerate(filename):
+        for p,file in enumerate(filename):
         pathFile = path +'/'+file
         I = cv2.imread(pathFile,0)
         testing.append(I)
-
+        
+        # Inicializamos un clasificador con uno ya entrenado para detectar matriculas
         cascada = cv2.CascadeClassifier(pathHaar)
         # Deteccion de las matriculas de la imagen
         rectangulos = cascada.detectMultiScale(I, minNeighbors=2, scaleFactor=1.4)
